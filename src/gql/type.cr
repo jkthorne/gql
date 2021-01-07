@@ -1,6 +1,8 @@
 class GQL::Type < GQL::Base
-  def initialize(name, implements)
+  def initialize(name, *implements)
     super()
-    @io = "type #{name} #{implements.join(" & ")} { "
+    @io << "type #{name} "
+    @io << implements.join(" & ") if implements
+    @io << " { "
   end
 end

@@ -1,6 +1,6 @@
 class GQL::Input < GQL::Base
   def initialize(name)
-    super
+    super()
     @io << "input #{name} { "
   end
 end

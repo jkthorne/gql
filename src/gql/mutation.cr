@@ -1,6 +1,6 @@
 class GQL::Mutation < GQL::Base
   def initialize
-    super
+    super()
     @io << "mutation { "
   end
 end

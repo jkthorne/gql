@@ -1,6 +1,6 @@
-class GQL::Mutation < GQL::Base
+class GQL::Fragment < GQL::Base
   def initialize(name, type)
-    super
+    super()
     @io << "fragment #{name} on #{type} { "
   end
 end

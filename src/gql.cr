@@ -12,14 +12,20 @@ require "./gql/union"
 module GQL
   VERSION = "0.1.0"
 
-  def self.register(name, &block)
-    GQL::Base.send(:define_method, "#{name}!") do
-      block.call(self)
+  macro register(name, &block)
+    class GQL::Base
+      def {{ name.id }}!
+      ->(
+        {{block.args.splat}} : GQL::Base
+      ) {
+      	{{ yield }}
+      }.call(self)
+      end
     end
   end
 
   def self.enum(name, *consts)
-    Enum.new(name, consts).build ##TODO: check for block
+    Enum.new(name, consts).build
   end
 
   def self.extend(klass, type)
@@ -40,8 +46,8 @@ module GQL
     gql.build
   end
 
-  def self.interface(name)
-    gql = Interface.new(name)
+  def self.interface(name, *implements)
+    gql = Interface.new(name, *implements)
     yield gql
     gql.build
   end
@@ -58,15 +64,13 @@ module GQL
     gql.build
   end
 
-  def self.type(name)
-    gql = Type.new(name)
+  def self.type(name, *implements)
+    gql = Type.new(name, *implements)
     yield gql
     gql.build
   end
 
-  def self.union(name, types)
-    gql = Union.new(name, types)
-    yield gql
-    gql.build
+  def self.union(name, *types)
+    Union.new(name, *types).build
   end
 end

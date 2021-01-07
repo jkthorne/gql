@@ -23,8 +23,10 @@ class GQL::Base
       io << "...on " << m_name[3..-1] << ' '
     elsif m_name.starts_with?("at_")
       io << '@' << m_name[3..-1]
+    elsif m_name.ends_with?("_path")
+      io << ' ' << m_name[0..-6].gsub('_', ':')
     else
-      io << ' ' << m_name.gsub('_', ':')
+      io << ' ' << m_name
     end
 
     {% if call.named_args && 0 < call.named_args.size %}
@@ -36,7 +38,7 @@ class GQL::Base
 
       io << '(' << n_args.map{ |k, v| "#{k}: #{v}" }.join(", ") << ')'
     {% elsif 1 == call.args.size %}
-      io << ": " << {{ call.args.first.stringify }}
+      io << ": " << {{ call.args.first }}
     {% elsif 1 < call.args.size %}
       io << {{ call.args }}.map{ |a| "(#{a}: $#{a})" }.join(", ")
     {% end %}
