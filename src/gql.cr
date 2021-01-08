@@ -1,3 +1,6 @@
+require "json"
+require "http/client"
+
 require "./gql/base"
 require "./gql/enum"
 require "./gql/extend"
@@ -8,6 +11,8 @@ require "./gql/mutation"
 require "./gql/query"
 require "./gql/type"
 require "./gql/union"
+
+require "./client"
 
 module GQL
   VERSION = "0.1.0"
@@ -21,6 +26,15 @@ module GQL
       	{{ yield }}
       }.call(self)
       end
+    end
+  end
+
+  def self.client(uri : (String|URI), headers : Hash(String, String), tls : Bool)
+    case uri
+    when String
+      Client.new(URI.parse(uri), headers, tls)
+    else
+      Client.new(uri, headers, tls)
     end
   end
 
