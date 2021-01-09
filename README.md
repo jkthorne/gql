@@ -9,7 +9,7 @@ TODO: Write a description here
    ```yaml
    dependencies:
      gql:
-       github: your-github-user/gql
+       github: wontruefree/gql
    ```
 
 2. Run `shards install`
